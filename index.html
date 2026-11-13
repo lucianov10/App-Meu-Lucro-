@@ -1,0 +1,449 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0f172a">
+<title>Meu Lucro – Celulares</title>
+<style>
+:root{
+  --bg:#eef2f7; --bg-grad:radial-gradient(1200px 500px at 50% -200px,#dbe6ff 0%,transparent 60%);
+  --card:#ffffff; --ink:#0f172a; --muted:#64748b; --line:#e2e8f0;
+  --blue:#2563eb; --blue-dark:#1d4ed8; --blue-soft:#eef4ff;
+  --green:#059669; --green-soft:#ecfdf5;
+  --red:#dc2626; --red-soft:#fef2f2;
+  --amber:#d97706; --amber-soft:#fffbeb;
+  --purple:#7c3aed; --purple-soft:#f5f3ff;
+  --shadow-sm:0 1px 2px rgba(15,23,42,.06);
+  --shadow-md:0 8px 24px -12px rgba(15,23,42,.18);
+  --shadow-lg:0 20px 40px -20px rgba(15,23,42,.28);
+  --radius:16px; --radius-sm:11px;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0b1220; --bg-grad:radial-gradient(1200px 500px at 50% -200px,#1e3a8a33 0%,transparent 60%);
+    --card:#111a2e; --ink:#e2e8f0; --muted:#94a3b8; --line:#1f2a44;
+    --blue-soft:#12203f; --green-soft:#062a20; --red-soft:#2a0f14; --amber-soft:#2a1f07; --purple-soft:#1c1338;
+    --shadow-md:0 8px 24px -12px rgba(0,0,0,.6);
+    --shadow-lg:0 20px 40px -20px rgba(0,0,0,.8);
+  }
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;background:var(--bg);background-image:var(--bg-grad);background-repeat:no-repeat;
+  color:var(--ink);font:15px system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  min-height:100vh;
+}
+/* ===== Header ===== */
+header{
+  background:linear-gradient(135deg,#0f172a 0%,#1e293b 55%,#1e3a8a 100%);
+  color:#fff;padding:22px 0 26px;border-radius:0 0 26px 26px;
+  box-shadow:var(--shadow-lg);position:relative;overflow:hidden;
+}
+header::before{
+  content:"";position:absolute;inset:-40% -10% auto auto;width:320px;height:320px;border-radius:50%;
+  background:radial-gradient(circle,#3b82f644 0%,transparent 70%);pointer-events:none;
+}
+.brandrow{display:flex;align-items:center;gap:14px;position:relative}
+.brandlogo{
+  display:flex;width:52px;height:52px;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,#3b82f6,#8b5cf6);border-radius:14px;
+  box-shadow:0 8px 20px -6px #3b82f6aa;font-size:26px;flex-shrink:0;
+}
+.brandtext{min-width:0;flex:1}
+h1{font-size:20px;margin:0 0 3px;font-weight:800;letter-spacing:-.02em}
+header p{margin:0;color:#94a3b8;font-size:13px}
+.brandtools{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.brandtools button{
+  border:1px solid #334155;background:#1e293b;color:#cbd5e1;border-radius:9px;
+  padding:7px 11px;font-size:12px;font-weight:600;cursor:pointer;transition:.2s;
+}
+.brandtools button:hover{background:#334155;color:#fff;border-color:#475569}
+/* ===== Layout ===== */
+.wrap{max-width:780px;margin:auto;padding:0 16px 32px}
+/* ===== Month select ===== */
+.month{margin:20px 0 12px;display:flex;align-items:center;justify-content:space-between;gap:10px;font-weight:700}
+.month span{font-size:14px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+select.monthpick{
+  border:1px solid var(--line);background:var(--card);color:var(--ink);
+  border-radius:10px;padding:9px 12px;font-weight:600;cursor:pointer;
+  box-shadow:var(--shadow-sm);transition:.2s;
+}
+select.monthpick:hover{border-color:var(--blue)}
+/* ===== Cards ===== */
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.card{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  padding:16px;min-width:0;box-shadow:var(--shadow-sm);transition:.25s;position:relative;overflow:hidden;
+}
+.card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);border-color:#cbd5e1}
+.card .icon{
+  width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;
+  font-size:17px;margin-bottom:10px;
+}
+.card small{display:block;color:var(--muted);font-size:12px;font-weight:600;margin-bottom:6px;text-transform:uppercase;letter-spacing:.03em}
+.amount{font-size:clamp(19px,5vw,24px);font-weight:800;letter-spacing:-.02em;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
+.card.profit .icon{background:var(--green-soft);color:var(--green)}
+.card.revenue .icon{background:var(--blue-soft);color:var(--blue)}
+.card.costs .icon{background:var(--red-soft);color:var(--red)}
+.card.count .icon{background:var(--purple-soft);color:var(--purple)}
+.green{color:var(--green)}.red{color:var(--red)}
+/* ===== Nav tabs ===== */
+nav{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:20px 0;
+  background:var(--card);border:1px solid var(--line);border-radius:14px;padding:6px;box-shadow:var(--shadow-sm);
+}
+nav button{
+  border:0;background:transparent;border-radius:10px;padding:11px 4px;font-size:12px;font-weight:650;
+  color:var(--muted);cursor:pointer;transition:.2s;display:flex;flex-direction:column;align-items:center;gap:3px;
+}
+nav button .ico{font-size:17px}
+nav button:hover{color:var(--ink);background:var(--blue-soft)}
+nav button.active{background:linear-gradient(135deg,var(--blue),var(--blue-dark));color:#fff;box-shadow:0 6px 16px -6px var(--blue)}
+/* ===== Panels / forms ===== */
+.panel{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  padding:20px;margin-bottom:14px;box-shadow:var(--shadow-sm);
+  animation:fadeIn .3s ease;
+}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+h2{font-size:17px;margin:0 0 16px;font-weight:750;letter-spacing:-.01em;display:flex;align-items:center;gap:8px}
+label{display:block;font-size:13px;font-weight:650;margin:14px 0 6px;color:var(--ink)}
+label:first-of-type{margin-top:0}
+input,select.field{
+  width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;
+  background:var(--card);color:var(--ink);outline:none;transition:.2s;font-variant-numeric:tabular-nums;
+}
+input::placeholder{color:var(--muted);opacity:.7}
+input:focus,select.field:focus{border-color:var(--blue);box-shadow:0 0 0 4px #2563eb22}
+input[type="file"]{padding:10px;font-size:13px;cursor:pointer}
+input[type="file"]::file-selector-button{
+  border:0;background:var(--blue-soft);color:var(--blue);border-radius:8px;padding:6px 10px;
+  font-weight:650;margin-right:10px;cursor:pointer;font-family:inherit;
+}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+button.primary{
+  background:linear-gradient(135deg,var(--blue),var(--blue-dark));color:#fff;border:0;border-radius:11px;
+  padding:14px 16px;font-weight:700;width:100%;margin-top:18px;cursor:pointer;
+  box-shadow:0 8px 20px -8px var(--blue);transition:.2s;font-size:15px;
+}
+button.primary:hover{transform:translateY(-1px);box-shadow:0 12px 24px -8px var(--blue)}
+button.primary:active{transform:translateY(0)}
+button.secondary{
+  background:var(--blue-soft);color:var(--blue);border:0;border-radius:10px;padding:11px 14px;
+  font-weight:650;cursor:pointer;transition:.2s;font-size:13px;
+}
+button.secondary:hover{background:#dbe6ff;filter:brightness(.97)}
+button.danger{
+  background:var(--red-soft);color:var(--red);border:0;border-radius:8px;padding:7px 11px;
+  font-size:12px;font-weight:650;cursor:pointer;margin-top:8px;transition:.2s;
+}
+button.danger:hover{background:#fecaca;filter:brightness(.97)}
+.hint{font-size:12px;color:var(--muted);line-height:1.5;margin-top:10px;padding:10px 12px;background:var(--blue-soft);border-radius:9px;border-left:3px solid var(--blue)}
+/* ===== History entries ===== */
+.entry{
+  display:flex;justify-content:space-between;gap:12px;align-items:flex-start;
+  border-top:1px solid var(--line);padding:14px 0;transition:.2s;
+}
+.entry:first-child{border-top:0;padding-top:4px}
+.entry:hover{background:var(--bg);margin:0 -10px;padding-left:10px;padding-right:10px;border-radius:10px}
+.entry strong{display:block;font-weight:700;font-size:14px;margin-bottom:2px}
+.entry small{color:var(--muted);font-size:12px;display:block}
+.entry .right{text-align:right;white-space:nowrap;flex-shrink:0}
+.entry .result{font-size:15px;font-weight:800;font-variant-numeric:tabular-nums}
+.badge{
+  display:inline-block;font-size:10px;font-weight:700;padding:3px 8px;border-radius:6px;
+  text-transform:uppercase;letter-spacing:.04em;margin-right:6px;
+}
+.badge.sale{background:var(--blue-soft);color:var(--blue)}
+.badge.repair{background:var(--amber-soft);color:var(--amber)}
+.badge.expense{background:var(--red-soft);color:var(--red)}
+.entry-photo{
+  width:64px;height:64px;object-fit:cover;border-radius:10px;margin-top:8px;
+  border:1px solid var(--line);transition:.2s;cursor:pointer;
+}
+.entry-photo:hover{transform:scale(1.05);box-shadow:var(--shadow-md)}
+.photo-preview{
+  display:none;max-width:150px;max-height:150px;object-fit:cover;border-radius:10px;
+  margin-top:10px;border:1px solid var(--line);box-shadow:var(--shadow-sm);
+}
+.empty{color:var(--muted);text-align:center;padding:32px 12px;font-size:14px}
+.empty::before{content:"📭";display:block;font-size:34px;margin-bottom:8px;opacity:.5}
+.hidden{display:none!important}
+.footer{font-size:11px;color:var(--muted);text-align:center;padding:16px 6px;line-height:1.5}
+/* ===== Toast ===== */
+.toast-wrap{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:99;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none}
+.toast{
+  background:#0f172a;color:#fff;padding:11px 18px;border-radius:12px;font-size:13px;font-weight:600;
+  box-shadow:var(--shadow-lg);animation:toastIn .3s ease;white-space:nowrap;max-width:90vw;
+}
+.toast.error{background:var(--red)}
+.toast.success{background:var(--green)}
+@keyframes toastIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+/* ===== Responsivo ===== */
+@media(min-width:600px){.cards{grid-template-columns:repeat(4,1fr)}}
+@media(max-width:380px){nav button{font-size:11px;padding:9px 2px}.amount{font-size:18px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="brandrow">
+      <div class="brandlogo">📱</div>
+      <div class="brandtext">
+        <h1>Meu Lucro – Celulares</h1>
+        <p>Controle simples de vendas, consertos e despesas</p>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="month">
+    <span>Resumo financeiro</span>
+    <select id="month" class="monthpick" aria-label="Selecionar mês"></select>
+  </div>
+
+  <section class="cards">
+    <div class="card profit">
+      <div class="icon">💰</div>
+      <small>Lucro estimado</small>
+      <div class="amount green" id="profit">R$ 0,00</div>
+    </div>
+    <div class="card revenue">
+      <div class="icon">📈</div>
+      <small>Receitas</small>
+      <div class="amount" id="revenue">R$ 0,00</div>
+    </div>
+    <div class="card costs">
+      <div class="icon">📉</div>
+      <small>Custos e despesas</small>
+      <div class="amount red" id="costs">R$ 0,00</div>
+    </div>
+    <div class="card count">
+      <div class="icon">📋</div>
+      <small>Registros no mês</small>
+      <div class="amount" id="count">0</div>
+    </div>
+  </section>
+
+  <nav role="tablist">
+    <button class="active" data-tab="sale" role="tab" aria-selected="true"><span class="ico">📱</span>Venda</button>
+    <button data-tab="repair" role="tab"><span class="ico">🔧</span>Conserto</button>
+    <button data-tab="expense" role="tab"><span class="ico">💸</span>Despesa</button>
+    <button data-tab="history" role="tab"><span class="ico">📋</span>Histórico</button>
+  </nav>
+
+  <section class="panel tab" id="sale" role="tabpanel">
+    <h2>📱 Registrar venda de celular</h2>
+    <label for="saleName">Modelo / identificação do celular</label>
+    <input id="saleName" placeholder="Ex.: iPhone 11 128 GB">
+    <div class="grid2">
+      <div><label for="saleCost">Quanto pagou na compra (R$)</label><input id="saleCost" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0,00"></div>
+      <div><label for="saleRepairCost">Peças e gastos para arrumar (R$)</label><input id="saleRepairCost" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0,00"></div>
+    </div>
+    <label for="salePrice">Por quanto vendeu (R$)</label><input id="salePrice" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0,00">
+    <label for="salePhoto">Foto do celular vendido (opcional)</label>
+    <input id="salePhoto" type="file" accept="image/*" capture="environment">
+    <img id="salePhotoPreview" class="photo-preview" alt="Prévia da foto do celular vendido">
+    <label for="saleDate">Data da venda</label><input id="saleDate" type="date">
+    <div class="hint">O lucro é calculado automaticamente: valor da venda menos o preço de compra e os gastos com peças/conserto.</div>
+    <button class="primary" onclick="addSale()">Salvar venda</button>
+  </section>
+
+  <section class="panel tab hidden" id="repair" role="tabpanel">
+    <h2>🔧 Registrar conserto</h2>
+    <label for="repairName">Serviço / aparelho</label><input id="repairName" placeholder="Ex.: Troca de tela – Samsung A32">
+    <div class="grid2">
+      <div><label for="repairCost">Custo de peças/material (R$)</label><input id="repairCost" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0,00"></div>
+      <div><label for="repairPrice">Valor cobrado (R$)</label><input id="repairPrice" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0,00"></div>
+    </div>
+    <label for="repairPhoto">Foto do celular (opcional)</label>
+    <input id="repairPhoto" type="file" accept="image/*" capture="environment">
+    <img id="repairPhotoPreview" class="photo-preview" alt="Prévia da foto do celular">
+    <label for="repairDate">Data do conserto</label><input id="repairDate" type="date">
+    <div class="hint">O lucro do serviço é o valor cobrado menos o custo de peças e materiais. A foto fica salva junto com o registro neste aparelho.</div>
+    <button class="primary" onclick="addRepair()">Salvar conserto</button>
+  </section>
+
+  <section class="panel tab hidden" id="expense" role="tabpanel">
+    <h2>💸 Registrar despesa</h2>
+    <label for="expenseName">Descrição da despesa</label><input id="expenseName" placeholder="Ex.: Aluguel, energia, material">
+    <label for="expenseValue">Valor (R$)</label><input id="expenseValue" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0,00">
+    <label for="expenseDate">Data da despesa</label><input id="expenseDate" type="date">
+    <button class="primary" onclick="addExpense()">Salvar despesa</button>
+  </section>
+
+  <section class="panel tab hidden" id="history" role="tabpanel">
+    <h2>📋 Histórico do mês</h2>
+    <div id="entries"></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:16px">
+      <button class="secondary" onclick="exportCSV()">📤 Exportar CSV</button>
+      <button class="secondary" onclick="backup()">💾 Backup</button>
+    </div>
+    <div class="hint">Os registros ficam salvos neste navegador. Faça backup regularmente para não perder seus dados.</div>
+  </section>
+
+  <div class="footer">Seus dados ficam neste aparelho/navegador. Este protótipo não envia informações para a internet.</div>
+</main>
+
+<div class="toast-wrap" id="toasts"></div>
+
+<script>
+const KEY='meuLucroCelulares_v1';
+let records=JSON.parse(localStorage.getItem(KEY)||'[]');
+const $=id=>document.getElementById(id);
+const today=new Date().toISOString().slice(0,10);
+['saleDate','repairDate','expenseDate'].forEach(id=>$(id).value=today);
+
+function money(n){return Number(n||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'})}
+function toast(msg,type='success'){
+  const w=$('toasts');const t=document.createElement('div');
+  t.className='toast '+type;t.textContent=msg;w.appendChild(t);
+  setTimeout(()=>{t.style.transition='.3s';t.style.opacity='0';t.style.transform='translateY(8px)';setTimeout(()=>t.remove(),300)},2200);
+}
+function save(){localStorage.setItem(KEY,JSON.stringify(records));render()}
+function monthKey(d){return (d||'').slice(0,7)}
+function selected(){return $('month').value}
+function initMonths(){
+  const now=new Date(), opts=[];
+  for(let i=0;i<18;i++){const d=new Date(now.getFullYear(),now.getMonth()-i,1);const k=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');opts.push(k)}
+  $('month').innerHTML=opts.map(k=>{let [y,m]=k.split('-');const label=new Date(+y,+m-1,1).toLocaleDateString('pt-BR',{month:'long',year:'numeric'});return <option value="${k}">${label.charAt(0).toUpperCase()+label.slice(1)}</option>}).join('');
+}
+function val(id){return $(id).value}
+function clear(ids){ids.forEach(id=>$(id).value='')}
+
+async function addSale(){
+  const c=val('saleCost'),parts=val('saleRepairCost')||'0',p=val('salePrice');
+  if(c===''||p===''){toast('Informe o valor da compra e da venda.','error');return}
+  const name=val('saleName').trim(),date=val('saleDate');
+  if(!name){toast('Preencha o modelo / identificação.','error');return}
+  if(!date){toast('Informe a data da venda.','error');return}
+  let photo='';
+  const file=$('salePhoto').files[0];
+  if(file){try{photo=await resizePhoto(file)}catch(e){toast('Não foi possível processar a foto.','error');return}}
+  const totalCost=(Number(c)||0)+(Number(parts)||0);
+  records.unshift({id:Date.now()+Math.random(),type:'sale',name,cost:totalCost,revenue:Number(p)||0,date,photo});
+  try{save()}catch(e){records.shift();toast('Armazenamento cheio. Não foi possível salvar.','error');return}
+  clear(['saleName','saleCost','saleRepairCost','salePrice','salePhoto']);
+  $('salePhotoPreview').removeAttribute('src');$('salePhotoPreview').style.display='none';$('saleDate').value=today;
+  toast('Venda salva com sucesso!');
+}
+
+function resizePhoto(file){
+  return new Promise((resolve,reject)=>{
+    const reader=new FileReader();
+    reader.onerror=reject;
+    reader.onload=()=>{
+      const img=new Image();
+      img.onerror=reject;
+      img.onload=()=>{
+        const max=1000,scale=Math.min(1,max/Math.max(img.width,img.height));
+        const canvas=document.createElement('canvas');
+        canvas.width=Math.round(img.width*scale);canvas.height=Math.round(img.height*scale);
+        canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height);
+        resolve(canvas.toDataURL('image/jpeg',0.78));
+      };
+      img.src=reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+$('salePhoto').addEventListener('change',async()=>{
+  const file=$('salePhoto').files[0],preview=$('salePhotoPreview');
+  if(!file){preview.removeAttribute('src');preview.style.display='none';return}
+  if(!file.type.startsWith('image/')){toast('Escolha um arquivo de imagem.','error');$('salePhoto').value='';return}
+  try{preview.src=await resizePhoto(file);preview.style.display='block'}
+  catch(e){toast('Não foi possível carregar essa foto.','error');$('salePhoto').value='';preview.style.display='none'}
+});
+$('repairPhoto').addEventListener('change',async()=>{
+  const file=$('repairPhoto').files[0],preview=$('repairPhotoPreview');
+  if(!file){preview.removeAttribute('src');preview.style.display='none';return}
+  if(!file.type.startsWith('image/')){toast('Escolha um arquivo de imagem.','error');$('repairPhoto').value='';return}
+  try{preview.src=await resizePhoto(file);preview.style.display='block'}
+  catch(e){toast('Não foi possível carregar essa foto.','error');$('repairPhoto').value='';preview.style.display='none'}
+});
+
+async function addRepair(){
+  const c=val('repairCost'),p=val('repairPrice');
+  if(c===''||p===''){toast('Informe o custo e o valor cobrado.','error');return}
+  let photo='';
+  const file=$('repairPhoto').files[0];
+  if(file){try{photo=await resizePhoto(file)}catch(e){toast('Não foi possível processar a foto.','error');return}}
+  if(!val('repairName').trim()){toast('Preencha a descrição.','error');return}
+  if(!val('repairDate')){toast('Informe a data.','error');return}
+  records.unshift({id:Date.now()+Math.random(),type:'repair',name:val('repairName').trim(),cost:Number(c)||0,revenue:Number(p)||0,date:val('repairDate'),photo});
+  try{save()}catch(e){records.shift();toast('Armazenamento cheio. Não foi possível salvar.','error');return}
+  clear(['repairName','repairCost','repairPrice','repairPhoto']);
+  $('repairPhotoPreview').removeAttribute('src');$('repairPhotoPreview').style.display='none';$('repairDate').value=today;
+  toast('Conserto salvo com sucesso!');
+}
+
+function addExpense(){
+  const v=val('expenseValue');
+  if(v===''||Number(v)<0){toast('Informe um valor válido.','error');return}
+  if(!val('expenseName').trim()){toast('Preencha a descrição.','error');return}
+  if(!val('expenseDate')){toast('Informe a data.','error');return}
+  records.unshift({id:Date.now()+Math.random(),type:'expense',name:val('expenseName').trim(),cost:Number(v)||0,revenue:0,date:val('expenseDate')});
+  save();
+  clear(['expenseName','expenseValue']);$('expenseDate').value=today;
+  toast('Despesa salva com sucesso!');
+}
+
+function render(){
+  const list=records.filter(r=>monthKey(r.date)===selected());
+  const rev=list.reduce((s,r)=>s+r.revenue,0);
+  const costs=list.reduce((s,r)=>s+r.cost,0);
+  const profit=list.reduce((s,r)=>s+(r.type==='expense'?-r.cost:r.revenue-r.cost),0);
+  $('revenue').textContent=money(rev);
+  $('costs').textContent=money(costs);
+  $('profit').textContent=money(profit);
+  $('profit').className='amount '+(profit>=0?'green':'red');
+  $('count').textContent=list.length;
+  $('entries').innerHTML=list.length?list.map(r=>{
+    const typeName={sale:'Venda',repair:'Conserto',expense:'Despesa'}[r.type];
+    const typeClass={sale:'sale',repair:'repair',expense:'expense'}[r.type];
+    const result=r.type==='expense'?-r.cost:r.revenue-r.cost;
+    return `<div class="entry">
+      <div>
+        <span class="badge ${typeClass}">${typeName}</span>
+        <strong>${esc(r.name)}</strong>
+        <small>${new Date(r.date+'T12:00:00').toLocaleDateString('pt-BR')}</small>
+        ${r.photo?<br><img class="entry-photo" src="${r.photo}" alt="Foto do celular">:''}
+      </div>
+      <div class="right">
+        <div class="result ${result>=0?'green':'red'}">${money(result)}</div>
+        <button class="danger" onclick="delRecord('${r.id}')">Excluir</button>
+      </div>
+    </div>`
+  }).join(''):'<div class="empty">Nenhum registro neste mês.</div>';
+}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function delRecord(id){if(confirm('Excluir este registro?')){records=records.filter(r=>String(r.id)!==String(id));save();toast('Registro excluído.')}}
+
+function exportCSV(){
+  const rows=[['Data','Tipo','Descrição','Custo/Despesa','Valor recebido','Resultado'],...records.filter(r=>monthKey(r.date)===selected()).map(r=>[r.date,{sale:'Venda',repair:'Conserto',expense:'Despesa'}[r.type],r.name,r.cost,r.revenue,r.type==='expense'?-r.cost:r.revenue-r.cost])];
+  const csv=rows.map(row=>row.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(';')).join('\n');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'}));a.download='meu-lucro-'+selected()+'.csv';a.click();URL.revokeObjectURL(a.href);
+  toast('Planilha exportada!');
+}
+function backup(){
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(records,null,2)],{type:'application/json'}));a.download='backup-meu-lucro.json';a.click();URL.revokeObjectURL(a.href);
+  toast('Backup gerado!');
+}
+
+document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('nav button').forEach(x=>{x.classList.remove('active');x.setAttribute('aria-selected','false')});
+  b.classList.add('active');b.setAttribute('aria-selected','true');
+  document.querySelectorAll('.tab').forEach(x=>x.classList.add('hidden'));
+  $(b.dataset.tab).classList.remove('hidden');
+  if(b.dataset.tab==='history')render();
+}));
+$('month').addEventListener('change',render);
+initMonths();render();
+</script>
+</body>
+</html>
